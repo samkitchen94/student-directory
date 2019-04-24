@@ -1,17 +1,29 @@
 def input_students
-  puts "Please enter the names of the students"
+  puts "Time to enter the name of the students"
   puts "To finish, just hit return twice"
   
-  students =[]
+  @students =[]
   
-  name = gets.chomp
-  
-  while !name.empty? do
-    students << {name: name, cohort: :november}
-    puts "Now we have #{students.count} students"
-    name = gets.chomp
+  loop do
+    puts "Enter the name of a student"
+    name = gets.chomp.capitalize
+    break if name.empty?
+    
+    puts "What cohort is #{name} in?"
+    cohort = gets.chomp.capitalize
+    cohort = "November" if cohort.empty?
+    
+    puts "What age is #{name}?"
+    age = gets.chomp
+    
+    @students << {name: name, cohort: cohort, age: age.to_s}
+    
+    if @students.length == 1
+      puts "We now have #{@students.length} student"
+    else
+      puts "We now have #{@students.length} students"
+    end
   end
-  students
 end
 
 def print_header
@@ -19,18 +31,24 @@ def print_header
   puts "-----------"
 end 
 
-def print(students)
-  students.each_with_index do |student, index|
-    student[index] = index
-    puts "#{index + 1} #{student[:name]} (#{student[:cohort]} cohort)"
+def print_students
+  if @students.length > 0
+    @students.each_with_index do |student, index|
+      student[index] = index
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort, #{student[:age]} years old)"
+    end
   end 
 end
 
-def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+def print_footer
+  if @students.count == 1
+    puts "Overall, we have #{@students.count} great student"
+  else
+    puts "Overall, we have #{@students.count} great students"
+  end
 end
 
-students = input_students
+input_students
 print_header
-print(students)
-print_footer(students)
+print_students
+print_footer
