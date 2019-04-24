@@ -1,7 +1,7 @@
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp) # STDIN tells gets to read specifically from input stream
   end
 end
 
@@ -48,14 +48,27 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort, age = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym, age: age}
   end
   file.close
 end
+
+def try_load_students
+  filename = ARGV.first # first argument from command line
+  return if filename.nil? # get out of the method if filename isn't given
+  if File.exists?(filename) # check it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+    
         
 def input_students
   puts "Time to enter the name of the students"
@@ -65,15 +78,15 @@ def input_students
   
   loop do
     puts "Enter the name of a student"
-    name = gets.chomp.capitalize
+    name = STDIN.gets.chomp.capitalize
     break if name.empty?
     
     puts "What cohort is #{name} in?"
-    cohort = gets.chomp.capitalize
+    cohort = STDIN.gets.chomp.capitalize
     cohort = "November" if cohort.empty?
     
     puts "What age is #{name}?"
-    age = gets.chomp
+    age = STDIN.gets.chomp
     
     @students << {name: name, cohort: cohort, age: age.to_s}
     
@@ -107,8 +120,6 @@ def print_footer
   end
 end
 
+try_load_students
 interactive_menu
-input_students
-print_header
-print_students
-print_footer
+
