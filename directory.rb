@@ -6,6 +6,7 @@ def interactive_menu
 end
 
 def print_menu
+    puts "What would you like to do in the directory?"
     puts "1. Input the students"
     puts "2. Show the students"
     puts "3. Save the list to students.csv"
@@ -46,6 +47,7 @@ def save_students
     file.puts csv_line
   end
   file.close
+  puts "Your student directory is saved!"
 end
 
 def load_students(filename = "students.csv")
@@ -55,6 +57,7 @@ def load_students(filename = "students.csv")
     @students << {name: name, cohort: cohort.to_sym, age: age}
   end
   file.close
+  puts "Students.csv is loaded!"
 end
 
 def try_load_students
@@ -71,7 +74,7 @@ end
     
         
 def input_students
-  puts "Time to enter the name of the students"
+  puts "Time to enter the names of the students"
   puts "To finish, just hit return twice"
   
   @students =[]
@@ -98,6 +101,9 @@ def input_students
   end
 end
 
+# could put a .sort_by method for @students to sort by cohort or age in 
+# input_students?
+
 def print_header
   puts "The students of Villains Academy"
   puts "-----------"
@@ -107,7 +113,7 @@ def print_students
   if @students.length > 0
     @students.each_with_index do |student, index|
       student[index] = index
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort, #{student[:age]} years old)"
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort, #{student[:age]} years old)".center(30)
     end
   end 
 end
